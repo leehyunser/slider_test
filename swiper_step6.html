@@ -1,0 +1,227 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<title>plugins :: Swiper Slider</title>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic">
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+<style>
+ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+a {
+	text-decoration: none;
+	color: #000;
+}
+:root {
+	--swiper-theme-color: #fff;
+}
+body {
+	margin: 0;
+	padding: 0;
+	font-family: "Open Sans", sans-serif;
+	font-size: 14px;
+	background-color: #eee;
+	color: #000;
+}
+
+/* main slider */
+.main_slider {
+	position: relative;
+	height: 480px;
+}
+.main_slider .swiper-container {
+	width: 100%;
+	height: 100%;
+}
+.main_slider .swiper-container .swiper-slide {
+	text-align: center;
+	font-size: 18px;
+	background: #fff;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+	-webkit-justify-content: center;
+	justify-content: center;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	-webkit-align-items: center;
+	align-items: center;
+}
+.main_slider .swiper-container .swiper-slide img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+.main_slider .swiper-pagination {
+	bottom: 28px;
+}
+.main_slider .swiper-pagination .swiper-pagination-bullet {
+	margin: 0 1px;
+	width: 25px;
+	height: 3px;
+	border-radius: 0;
+	background: #000;
+	opacity: 0.2;
+}
+.main_slider .swiper-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active {
+	opacity: 1;
+	background-color: var(--swiper-theme-color);
+}
+.main_slider .prev,
+.main_slider .next {
+	display: block;
+	position: absolute;
+	top: 50%;
+	z-index: 1000;
+	margin-top: -16px;
+	width: 22px;
+	height: 17px;
+	overflow: hidden;
+	text-indent: -9999px;
+	font-size: 18px;
+}
+.main_slider .prev {
+	left: 50px;
+	background: url(images/btn_prev.png) no-repeat 0 0;
+}
+.main_slider .next {
+	right: 50px;
+	background: url(images/btn_next.png) no-repeat 0 0;
+}
+.main_slider .controller #pause_play {
+	display: block;
+	position: absolute;
+	left: 50%;
+	bottom: 21px;
+	z-index: 1000;
+	margin-left: -100px;
+	width: 20px;
+	height: 20px;
+	overflow: hidden;
+	text-indent: -9999px;
+}
+.main_slider .controller #pause_play.pause {
+	background: url(images/btn_pause.png) no-repeat 0 0;
+}
+.main_slider .controller #pause_play.play {
+	background: url(images/btn_play.png) no-repeat 0 0;
+}
+.main_slider .controller #pause_play.pause {
+	background: url(images/btn_pause.png) no-repeat 0 0;
+}
+.main_slider .controller #pause_play.play {
+	background: url(images/btn_play.png) no-repeat 0 0;
+}
+.main_slider .account { /* added */
+	position: absolute;
+	left: 20%;
+	top: 42%;
+	z-index: 1000;
+	font-size: 24px;
+}
+.main_slider .account .current { /* added */
+	font-size: 30px;
+	font-weight: 600;
+}
+</style>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script>
+$(function(){
+	var mainSwiper=new Swiper(".mainSwiper", {
+		speed: 1200,
+		effect: "fade",
+		fadeEffect: {
+			crossFade: true,
+		},
+		autoplay: {
+			delay: 5000,
+		},
+		pagination: {
+			el: ".swiper-pagination",
+		},
+		on: { // added
+			init: function(){
+				// console.log("initialized!!');
+				accountText(this);
+			},
+			slideChange: function(){
+				// console.log("slide changed!!");
+				accountText(this);
+			},
+		},
+	});
+
+	function accountText(obj){ // added
+		// console.log(obj.slides.length, obj.activeIndex);
+		$(".main_slider .account .current").text(obj.activeIndex+1);
+		$(".main_slider .account .total").text(obj.slides.length);
+	}
+	$(".prev").click(function(e){
+		e.preventDefault();
+		mainSwiper.slidePrev();
+	});
+	$(".next").click(function(e){
+		e.preventDefault();
+		mainSwiper.slideNext();
+	});
+	$(".play").click(function(e){
+		e.preventDefault();
+		mainSwiper.autoplay.start();
+	});
+	$("#pause_play").click(function(e){
+		e.preventDefault();
+		if($(this).hasClass("play")){
+			$(this).removeAttr("class");
+			$(this).addClass("pause");
+			$(this).text("pause");
+			mainSwiper.autoplay.start();
+		}
+		else{
+			$(this).removeAttr("class");
+			$(this).addClass("play");
+			$(this).text("play");
+			mainSwiper.autoplay.stop();
+		}
+	});
+});
+</script>
+</head>
+
+<body>
+<div class="wrapper">
+	<div class="main_slider">
+		<div class="swiper-container mainSwiper">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide"><img src="images/main1.jpg" alt="image1"></div>
+				<div class="swiper-slide"><img src="images/main2.jpg" alt="image2"></div>
+				<div class="swiper-slide"><img src="images/main3.jpg" alt="image3"></div>
+				<div class="swiper-slide"><img src="images/main4.jpg" alt="image4"></div>
+				<div class="swiper-slide"><img src="images/main5.jpg" alt="image5"></div>
+			</div>
+
+			<div class="swiper-pagination"></div>
+		</div>
+		<div class="controller">
+			<ul>
+				<li><a href="" class="prev">previous</a></li>
+				<li><a href="" class="next">next</a></li>
+			</ul>
+			<a href="" id="pause_play" class="pause">pause</a>
+		</div>
+		<div class="account"><!-- added -->
+			<span class="current">current</span> / <span class="total">total</span>
+		</div>
+	</div>
+</div>
+</body>
+</html>
